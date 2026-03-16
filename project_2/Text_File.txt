@@ -1,0 +1,88 @@
+1. Model Setup & Relationships
+
+   ->Dataset files ko Power Query me import 
+     Data types assign 
+     Column	       Type
+     ID Columns	       Whole Number
+     Revenue	       Decimal
+     Date	       Date
+
+   ->Blank rows remove 
+
+   ->Close & Apply 
+
+   ->Model View me relationships create 
+
+     Customer_ Dim[Customer ID] → Sales_ Fact[Customer ID]
+     Product_ Dim[Product ID] → Sales_ Fact[Product ID]
+     Region_ Dim[Region ID] → Sales_ Fact[Region ID]   
+     Date_ Dim[Date Key] → Sales_ Fact[Date Key]
+     Sales_ Fact[Sales ID] → Returns_ Fact[Sales ID]
+     Date_ Dim[Date Key] → Returns_ Fact[Return Date Key] (Inactive)
+
+2. Schema Design
+   ->Star Schema
+     Sales_ Fact ko central fact table rakha gaya aur dimension tables uske around connect:
+     Customer_ Dim → Sales_ Fact
+     Product_ Dim → Sales_ Fact
+     Region_ Dim → Sales_ Fact
+     Date_ Dim → Sales_ Fact
+
+   ->Cardinality Types
+     1 : Many (One-to-Many)
+     Ek table me unique value hoti hai aur dusri table me same value multiple records 
+     Example: Customer_ Dim → Sales_ Fact
+
+     Many : 1 (Many-to-One)
+     Multiple records ek single record ko refer karte hain.
+     Example: Sales_ Fact → Product_ Dim
+
+     1 : 1 (One-to-One)
+     Dono tables me key value sirf ek baar hoti hai.
+     Example: Sales_ Fact → Returns_ Fact
+
+3. Advanced Model Settings
+
+   Relationship Settings
+   Relationships ko One-to-Many rakha.
+   Single cross-filter direction use kiya.
+   Bidirectional Filters
+   Default me disable rakhe.
+   Sirf zarurat hone par enable kiye ja sakte hain.
+
+   Inactive Relationship
+   Date_ Dim aur Returns_ Fact ke beech inactive relationship 
+   Calculation me USERELATIONSHIP() function 
+
+   Filter Ambiguity
+   Model check taaki multiple filter paths na ho.
+   Single filtering se circular filtering avoid ki.
+
+4. Data Model Enhancements
+   Data Formats
+   Revenue → Currency
+   Cost → Currency
+   Quantity → Whole Number
+   Date → Date
+
+   Data Categories
+   City → City
+   Country → Country
+   ProductName → Product
+
+   Hierarchies
+   Date_ Dim
+   Year
+ → Quarter
+ → Month
+ → Date
+
+   Region_ Dim
+   Country
+ → State
+ → City
+
+   Product_ Dim
+   Category
+ → Subcategory
+ → ProductName
